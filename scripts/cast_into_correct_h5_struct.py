@@ -8,12 +8,12 @@ conn_type = {
     'DISC': r"DISCON_SEMWALL smear_N[0-9]+ SINGLET"
 }
 
-output_hdf5 = "meson_correlators.hdf5"
+output_hdf5 = "/users/nrebelobrito/flavour_singlet_and_glueball_mixing_sp4/parsed_ferm_data/singlets_smeared.hdf5"
 
 for ensemble in ensembles:
     for rep in reps:
 
-        filename = f"{ensemble}_{rep}_spectrum.hdf5"
+        filename = f"/users/nrebelobrito/flavour_singlet_and_glueball_mixing_sp4/parsed_ferm_data/{ensemble}_{rep}_disc_spectrum.hdf5"
         input_file = h5py.File(filename, 'r')
         output_file = h5py.File(output_hdf5, 'a')
 

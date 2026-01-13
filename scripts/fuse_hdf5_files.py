@@ -3,12 +3,13 @@ import h5py as h5
 ensembles = ['M3', 'M4']
 reps = ["AS", "FUN"]
 connectedness = ['conn', 'disc']
+data_dir = "/users/nrebelobrito/flavour_singlet_and_glueball_mixing_sp4/parsed_ferm_data/"
 
 for ensemble in ensembles:
     for rep in reps:
         # Use bigger file to append to
-        disc_file = f'{ensemble}_{rep}_disc_spectrum.hdf5'
-        conn_file = f'{ensemble}_{rep}_conn_spectrum.hdf5'
+        disc_file = f'{data_dir}{ensemble}_{rep}_disc_spectrum.hdf5'
+        conn_file = f'{data_dir}{ensemble}_{rep}_conn_spectrum.hdf5'
 
         with h5.File(disc_file, 'a') as disc_h5, h5.File(conn_file, 'r') as conn_h5:
             print("Keys in disc file: ", disc_h5[ensemble].keys())

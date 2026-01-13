@@ -14,7 +14,8 @@ function main(h5file;ensemble,disc,nhits,file,setup=true,filter_channels=false,c
     end
 end
 
+output_dir = "users/nrebelobrito/flavour_singlet_and_glueball_mixing_sp4/parsed_ferm_data/"
 for (ensemble,rep,disc,nhits,file) in eachrow(readdlm("input/listfile.txt",','))
-    filename = ensemble * "_" * rep * "_" * disc * "_spectrum.hdf5"
+    filename = output_dir * ensemble * "_" * rep * "_" * disc * "_spectrum.hdf5"
     main(filename;ensemble,disc,nhits,file,filter_channels=false,channels=nothing)
 end
