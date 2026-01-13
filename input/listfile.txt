@@ -1,0 +1,8 @@
+M3,FUN,conn,1,/users/nrebelobrito/sp4_mesonglueball_fermionic_data/out_spectrum_smeared_FUN_4000_121239.zst
+M3,FUN,disc,100,/users/nrebelobrito/sp4_mesonglueball_fermionic_data/out_spectrum_smeared_discon_FUN_4000_121239.zst
+M3,AS,conn,1,/users/nrebelobrito/sp4_mesonglueball_fermionic_data/out_spectrum_smeared_AS_4000_121239.zst
+M3,AS,disc,64,/users/nrebelobrito/sp4_mesonglueball_fermionic_data/out_spectrum_smeared_discon_AS_4000_121239.zst
+M4,FUN,conn,1,users/nrebelobrito/sp4_mesonglueball_fermionic_data/out_spectrum_smeared_FUN_1000_114701.zst
+M4,FUN,disc,32,/users/nrebelobrito/sp4_mesonglueball_fermionic_data/out_spectrum_smeared_discon_FUN_1000_114701.zst
+M4,AS,conn,1,users/nrebelobrito/sp4_mesonglueball_fermionic_data/out_spectrum_smeared_AS_1000_114701.zst
+M4,AS,disc,32,/users/nrebelobrito/sp4_mesonglueball_fermionic_data/out_spectrum_smeared_discon_AS_1000_114701.zst
