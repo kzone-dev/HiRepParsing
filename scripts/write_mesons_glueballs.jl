@@ -2,6 +2,18 @@ using Pkg; Pkg.activate("."); Pkg.instantiate()
 using HiRepParsing
 using HDF5
 using DelimitedFiles
+Pkg.add("ArgParse")
+using ArgParse
+
+function parse_commandline()
+    s = ArgParseSettings()
+    @add_arg_table s begin
+        "--h5file"
+            help = "Path to the output HDF5 file."
+            required = true
+    end
+    return parse_args(s)
+end
 
 function main(h5file;ensemble,disc,nhits,file,setup=true,filter_channels=false,channels=nothing)
     isfile(h5file) && rm(h5file)
@@ -14,7 +26,9 @@ function main(h5file;ensemble,disc,nhits,file,setup=true,filter_channels=false,c
     end
 end
 
-output_dir = "users/nrebelobrito/flavour_singlet_and_glueball_mixing_sp4/parsed_ferm_data/"
+args = parse_commandline()
+output_dir = args["h5file"] * "/"
+
 for (ensemble,rep,disc,nhits,file) in eachrow(readdlm("input/listfile.txt",','))
     filename = output_dir * ensemble * "_" * rep * "_" * disc * "_spectrum.hdf5"
     main(filename;ensemble,disc,nhits,file,filter_channels=false,channels=nothing)
