@@ -9,8 +9,8 @@ using YAML
 function parse_commandline()
     s = ArgParseSettings()
     @add_arg_table s begin
-        "--h5file"
-            help = "Path to the output HDF5 file."
+        "--output_dir"
+            help = "Path to the output directory."
             required = true
         "--ensemble"
             help = "Ensemble name to process."
@@ -36,7 +36,7 @@ function main(h5file;ensemble,rep,disc,nhits,file,setup=true,filter_channels=fal
 end
 
 args = parse_commandline()
-output_dir = args["h5file"] 
+output_dir = args["output_dir"]
 ensemble = args["ensemble"]
 config_yaml = args["config_yaml"]
 config = YAML.load_file(config_yaml)
