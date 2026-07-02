@@ -6,4 +6,3 @@
 *.txt
 !input/channels_chimera.txt
 !input/channels_glueballs.txt
-Manifest.toml
