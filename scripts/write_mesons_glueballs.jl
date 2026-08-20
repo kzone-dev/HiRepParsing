@@ -1,10 +1,17 @@
+# Regex based parsing for meson measurements
+
 using Pkg; Pkg.activate("."); Pkg.instantiate()
 using HiRepParsing
 using HDF5
 using DelimitedFiles
+
 Pkg.add("ArgParse")
 using ArgParse
-using YAML
+
+Pkg.add("CSV")
+Pkg.add("DataFrames")
+using CSV
+using DataFrames
 
 function parse_commandline()
     s = ArgParseSettings()
@@ -15,12 +22,17 @@ function parse_commandline()
         "--ensemble"
             help = "Ensemble name to process."
             required = true
-        "--config_yaml"
-            help = "Path to the YAML configuration file."
+        "--meson_measurements_metadata"
+            help = "Path to the metadata file containing meson measurements information."
             required = true
     end
     return parse_args(s)
 end
+
+args = parse_commandline()
+output_dir = args["output_dir"]
+ensemble = args["ensemble"]
+meson_measurements_metadata = args["meson_measurements_metadata"]
 
 function main(h5file;ensemble,rep,disc,nhits,file,setup=true,filter_channels=false,channels=nothing)
     #isfile(h5file) && rm(h5file)
@@ -35,25 +47,25 @@ function main(h5file;ensemble,rep,disc,nhits,file,setup=true,filter_channels=fal
     end
 end
 
-args = parse_commandline()
-output_dir = args["output_dir"]
-ensemble = args["ensemble"]
-config_yaml = args["config_yaml"]
-config = YAML.load_file(config_yaml)
-
 filename = joinpath(output_dir, ensemble * "_spectrum.hdf5")
+meson_metadata = CSV.read(meson_measurements_metadata, DataFrame)
+ensemble_rows = filter(row -> row.ensemble_name == ensemble, meson_metadata)
 
-for rep in keys(config["ensembles"][ensemble]["rep"])
-    disc_input_file = config["ensembles"][ensemble]["rep"][rep]["disc_input_file"]
-    conn_input_file = config["ensembles"][ensemble]["rep"][rep]["conn_input_file"]
-    ndisc_hits = config["ensembles"][ensemble]["rep"][rep]["disc_nhits"]
+for row in eachrow(ensemble_rows)
+
+    ndisc_hits = row.nsrc
+    rep = row.representation
+    input_connected = row.conn_file_input
+    input_disconnected = row.disc_file_input
     nconn_hits = 1
+    
     conn_str = "CONN"
     disc_str = "DISC"
 
     # Write connected contributions
-    main(filename; ensemble, rep, disc=conn_str, nhits=nconn_hits, file=conn_input_file, filter_channels=false, channels=nothing)
+    main(filename; ensemble, rep, disc=conn_str, nhits=nconn_hits, file=input_connected, filter_channels=false, channels=nothing)
     
     # Write disconnected contributions
-    main(filename; ensemble, rep, disc=disc_str, nhits=ndisc_hits, file=disc_input_file, filter_channels=false, channels=nothing)
+    main(filename; ensemble, rep, disc=disc_str, nhits=ndisc_hits, file=input_disconnected, filter_channels=false, channels=nothing)
+
 end
