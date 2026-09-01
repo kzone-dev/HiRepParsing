@@ -25,6 +25,9 @@ function parse_commandline()
         "--meson_measurements_metadata"
             help = "Path to the metadata file containing meson measurements information."
             required = true
+        "--zstd_directory"
+            help = "Path to the directory containing zstd compressed files."
+            required = true
     end
     return parse_args(s)
 end
@@ -33,6 +36,7 @@ args = parse_commandline()
 output_dir = args["output_dir"]
 ensemble = args["ensemble"]
 meson_measurements_metadata = args["meson_measurements_metadata"]
+zstd_directory = args["zstd_directory"]
 
 function main(h5file;ensemble,rep,disc,nhits,file,setup=true,filter_channels=false,channels=nothing)
     #isfile(h5file) && rm(h5file)
@@ -50,13 +54,14 @@ end
 filename = joinpath(output_dir, ensemble * "_spectrum.hdf5")
 meson_metadata = CSV.read(meson_measurements_metadata, DataFrame)
 ensemble_rows = filter(row -> row.ensemble_name == ensemble, meson_metadata)
+print(ensemble_rows)
 
 for row in eachrow(ensemble_rows)
 
     ndisc_hits = row.nsrc
     rep = row.representation
-    input_connected = row.conn_file_input
-    input_disconnected = row.disc_file_input
+    input_connected = joinpath(zstd_directory, row.conn_file_input)
+    input_disconnected = joinpath(zstd_directory, row.disc_file_input)
     nconn_hits = 1
     
     conn_str = "CONN"
